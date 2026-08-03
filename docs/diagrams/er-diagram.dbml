@@ -1,0 +1,71 @@
+// ColdGuard ER Diagram — dbdiagram.io source (v2)
+// Paste this at https://dbdiagram.io -> it renders the full visual ERD.
+// Matches docs/diagrams/schema.sql exactly — keep both in sync.
+
+Table users {
+  id uuid [pk]
+  name varchar
+  email varchar [unique]
+  password_hash varchar
+  phone_number varchar
+  role varchar [note: 'operator | admin']
+  status varchar [note: 'active | disabled']
+  created_at timestamp
+}
+
+Table storage_units {
+  id uuid [pk]
+  name varchar
+  facility_location varchar
+  temperature_category varchar [note: 'e.g. Normal 2-8C, Ultra-Cold -50 to -90C']
+  min_temp decimal
+  max_temp decimal
+  current_status varchar [note: 'online | pending | offline']
+  last_synced_at timestamp
+}
+
+Table inventory {
+  id uuid [pk]
+  medicine_name varchar
+  batch_number varchar
+  quantity int
+  expiry_date date
+  storage_unit_id uuid [ref: > storage_units.id]
+}
+
+Table temperature_logs {
+  id uuid [pk]
+  storage_unit_id uuid [ref: > storage_units.id]
+  temperature decimal
+  sensor_status varchar [note: 'ok | fault']
+  recorded_at timestamp 
+  note: 'insert-only — no update/delete API, DB role restricted to INSERT/SELECT'
+}
+
+Table alerts {
+  id uuid [pk]
+  storage_unit_id uuid [ref: > storage_units.id]
+  temperature decimal
+  alert_type varchar [note: 'above_max | below_min | trend_warning']
+  alert_status varchar [note: 'open | resolved']
+  triggered_at timestamp
+  note: 'insert-only, same tamper-proofing rule as temperature_logs'
+}
+
+Table compliance_reports {
+  id uuid [pk]
+  report_type varchar
+  generated_by uuid [ref: > users.id]
+  file_location varchar
+  generated_at timestamp
+}
+
+Table audit_logs {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+  action varchar
+  entity_type varchar
+  entity_id uuid
+  created_at timestamp
+  note: 'append-only — covers admin actions on users/storage_units/inventory'
+}
