@@ -90,3 +90,24 @@ def update_inventory(
     db.refresh(inventory)
 
     return inventory
+@router.delete("/{inventory_id}")
+def delete_inventory(
+    inventory_id: int,
+    db: Session = Depends(get_db)
+):
+    inventory = db.query(Inventory).filter(
+        Inventory.id == inventory_id
+    ).first()
+
+    if inventory is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Inventory item not found"
+        )
+
+    db.delete(inventory)
+    db.commit()
+
+    return {
+        "message": "Inventory item deleted successfully"
+    }
