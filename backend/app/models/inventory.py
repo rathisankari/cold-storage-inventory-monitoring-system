@@ -16,9 +16,9 @@ class Inventory(Base):
     )
 
     storage_unit_id: Mapped[int] = mapped_column(
-    Integer,
-    nullable=False
-)
+        Integer,
+        nullable=False
+    )
 
     vaccine_name: Mapped[str] = mapped_column(
         String(255),
@@ -52,7 +52,8 @@ class Inventory(Base):
 
     status: Mapped[str] = mapped_column(
         String(50),
-        default="Good"
+        default="Good",
+        nullable=False
     )
 
     created_at: Mapped[datetime] = mapped_column(
