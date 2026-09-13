@@ -3,12 +3,12 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.models.inventory import Inventory
+from app.models.storage_unit import StorageUnit
 from app.schemas.inventory import (
     InventoryCreate,
     InventoryResponse,
     InventoryUpdate,
 )
-
 
 router = APIRouter(
     prefix="/inventory",
@@ -17,7 +17,9 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[InventoryResponse])
-def get_inventory(db: Session = Depends(get_db)):
+def get_inventory(
+    db: Session = Depends(get_db)
+):
     inventory = db.query(Inventory).all()
     return inventory
 
@@ -45,6 +47,16 @@ def create_inventory(
     inventory: InventoryCreate,
     db: Session = Depends(get_db)
 ):
+    storage_unit = db.query(StorageUnit).filter(
+        StorageUnit.id == inventory.storage_unit_id
+    ).first()
+
+    if storage_unit is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Storage unit not found"
+        )
+
     new_inventory = Inventory(
         storage_unit_id=inventory.storage_unit_id,
         vaccine_name=inventory.vaccine_name,
@@ -77,7 +89,15 @@ def update_inventory(
             status_code=404,
             detail="Inventory item not found"
         )
+    storage_unit = db.query(StorageUnit).filter(
+    StorageUnit.id == inventory_data.storage_unit_id
+).first()
 
+    if storage_unit is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Storage unit not found"
+    )
     inventory.storage_unit_id = inventory_data.storage_unit_id
     inventory.vaccine_name = inventory_data.vaccine_name
     inventory.vaccine_code = inventory_data.vaccine_code
@@ -90,6 +110,8 @@ def update_inventory(
     db.refresh(inventory)
 
     return inventory
+
+
 @router.delete("/{inventory_id}")
 def delete_inventory(
     inventory_id: int,
