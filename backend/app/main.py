@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from app.api.auth import router as auth_router
 from app.api.inventory import router as inventory_router
 from app.api.storage_unit import router as storage_unit_router
 from app.api.temperature_log import router as temperature_log_router
@@ -40,6 +40,7 @@ Base.metadata.create_all(bind=engine)
 
 
 # API routes
+app.include_router(auth_router)
 app.include_router(inventory_router)
 app.include_router(storage_unit_router)
 app.include_router(temperature_log_router)
