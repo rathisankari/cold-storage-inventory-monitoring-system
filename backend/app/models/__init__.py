@@ -3,3 +3,4 @@ from app.models.temperature_log import TemperatureLog
 from app.models.alert import Alert
 from app.models.storage_unit import StorageUnit
 from app.models.user import User
+from app.models.audit_log import AuditLog

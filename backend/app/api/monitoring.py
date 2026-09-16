@@ -2,9 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.security import require_roles
 from app.models.alert import Alert
 from app.models.storage_unit import StorageUnit
 from app.models.temperature_log import TemperatureLog
+from app.models.user import User
 from app.schemas.temperature_log import TemperatureLogResponse
 from app.schemas.monitoring import MonitoringResponse
 
@@ -18,7 +20,10 @@ router = APIRouter(
 @router.get("/{storage_unit_id}", response_model=MonitoringResponse)
 def get_monitoring(
     storage_unit_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin", "Storage Operator")
+    )
 ):
     storage_unit = (
         db.query(StorageUnit)
@@ -81,13 +86,18 @@ def get_monitoring(
         "temperature_status": temperature_status,
         "active_alerts": active_alerts,
     }
+
+
 @router.get(
     "/{storage_unit_id}/temperature-history",
     response_model=list[TemperatureLogResponse]
 )
 def get_temperature_history(
     storage_unit_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin", "Storage Operator")
+    )
 ):
     storage_unit = (
         db.query(StorageUnit)

@@ -1,17 +1,23 @@
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.api.auth import router as auth_router
 from app.api.inventory import router as inventory_router
 from app.api.storage_unit import router as storage_unit_router
 from app.api.temperature_log import router as temperature_log_router
 from app.api.alert import router as alert_router
 from app.api.monitoring import router as monitoring_router
+from app.api.audit import router as audit_router
 
 from app.core.config import settings
 from app.core.database import Base, engine
 
-from app.models import Inventory, TemperatureLog, StorageUnit, Alert
+from app.models import (
+    Inventory,
+    TemperatureLog,
+    StorageUnit,
+    Alert,
+)
 
 
 app = FastAPI(title=settings.PROJECT_NAME)
@@ -46,6 +52,7 @@ app.include_router(storage_unit_router)
 app.include_router(temperature_log_router)
 app.include_router(monitoring_router)
 app.include_router(alert_router)
+app.include_router(audit_router)
 
 
 @app.get("/health")

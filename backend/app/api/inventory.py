@@ -2,8 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
+from app.core.security import require_roles
 from app.models.inventory import Inventory
 from app.models.storage_unit import StorageUnit
+from app.models.user import User
 from app.schemas.inventory import (
     InventoryCreate,
     InventoryResponse,
@@ -18,7 +20,10 @@ router = APIRouter(
 
 @router.get("/", response_model=list[InventoryResponse])
 def get_inventory(
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin", "Storage Operator")
+    )
 ):
     inventory = db.query(Inventory).all()
     return inventory
@@ -27,7 +32,10 @@ def get_inventory(
 @router.get("/{inventory_id}", response_model=InventoryResponse)
 def get_inventory_by_id(
     inventory_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin", "Storage Operator")
+    )
 ):
     inventory = db.query(Inventory).filter(
         Inventory.id == inventory_id
@@ -45,7 +53,10 @@ def get_inventory_by_id(
 @router.post("/", response_model=InventoryResponse)
 def create_inventory(
     inventory: InventoryCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin")
+    )
 ):
     storage_unit = db.query(StorageUnit).filter(
         StorageUnit.id == inventory.storage_unit_id
@@ -78,7 +89,10 @@ def create_inventory(
 def update_inventory(
     inventory_id: int,
     inventory_data: InventoryUpdate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin")
+    )
 ):
     inventory = db.query(Inventory).filter(
         Inventory.id == inventory_id
@@ -89,15 +103,17 @@ def update_inventory(
             status_code=404,
             detail="Inventory item not found"
         )
+
     storage_unit = db.query(StorageUnit).filter(
-    StorageUnit.id == inventory_data.storage_unit_id
-).first()
+        StorageUnit.id == inventory_data.storage_unit_id
+    ).first()
 
     if storage_unit is None:
         raise HTTPException(
             status_code=404,
             detail="Storage unit not found"
-    )
+        )
+
     inventory.storage_unit_id = inventory_data.storage_unit_id
     inventory.vaccine_name = inventory_data.vaccine_name
     inventory.vaccine_code = inventory_data.vaccine_code
@@ -115,7 +131,10 @@ def update_inventory(
 @router.delete("/{inventory_id}")
 def delete_inventory(
     inventory_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin")
+    )
 ):
     inventory = db.query(Inventory).filter(
         Inventory.id == inventory_id
