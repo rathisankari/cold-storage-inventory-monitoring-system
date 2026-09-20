@@ -10,6 +10,7 @@ import {
 import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import Login from "./pages/Login";
+import Alerts from "./pages/Alerts";
 import AuditLogs from "./pages/AuditLogs";
 import ComplianceReport from "./pages/ComplianceReport";
 
@@ -67,6 +68,15 @@ function AppContent() {
             </NavLink>
 
             <NavLink
+              to="/alerts"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              Alerts
+            </NavLink>
+
+            <NavLink
               to="/audit-logs"
               className={({ isActive }) =>
                 isActive ? "nav-link active" : "nav-link"
@@ -84,9 +94,7 @@ function AppContent() {
               Compliance Report
             </NavLink>
 
-            <button onClick={handleLogout}>
-              Logout
-            </button>
+            <button onClick={handleLogout}>Logout</button>
           </div>
         </nav>
       )}
@@ -108,6 +116,15 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Inventory />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/alerts"
+          element={
+            <ProtectedRoute>
+              <Alerts />
             </ProtectedRoute>
           }
         />
