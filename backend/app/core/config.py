@@ -8,6 +8,12 @@ class Settings(BaseSettings):
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int
 
+    SMTP_HOST: str
+    SMTP_PORT: int
+    SMTP_EMAIL: str
+    SMTP_PASSWORD: str
+    NOTIFICATION_EMAIL: str
+
     model_config = SettingsConfigDict(
         env_file="backend/.env",
         case_sensitive=True

@@ -14,7 +14,6 @@ function Inventory() {
 
   const [editingId, setEditingId] = useState(null);
   const [editQuantity, setEditQuantity] = useState("");
-  const [editStatus, setEditStatus] = useState("");
 
   useEffect(() => {
     api
@@ -69,7 +68,6 @@ function Inventory() {
       lot_number: item.lot_number,
       quantity: Number(editQuantity),
       expiration_date: item.expiration_date,
-      status: editStatus,
     };
 
     api
@@ -83,7 +81,6 @@ function Inventory() {
 
         setEditingId(null);
         setEditQuantity("");
-        setEditStatus("");
       })
       .catch((error) => {
         console.error(error);
@@ -91,10 +88,27 @@ function Inventory() {
       });
   };
 
+  const handleCompromise = (item) => {
+    api
+      .patch(`/inventory/${item.id}/status`, {
+        status: "Compromised",
+      })
+      .then((response) => {
+        setInventory((currentInventory) =>
+          currentInventory.map((inventoryItem) =>
+            inventoryItem.id === item.id ? response.data : inventoryItem
+          )
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        setError("Failed to mark inventory as compromised");
+      });
+  };
+
   const startEditing = (item) => {
     setEditingId(item.id);
     setEditQuantity(item.quantity);
-    setEditStatus(item.status);
   };
 
   if (error) {
@@ -284,29 +298,6 @@ function Inventory() {
                       }
                     />
 
-                    <select
-                      value={editStatus}
-                      onChange={(event) =>
-                        setEditStatus(event.target.value)
-                      }
-                    >
-                      <option value="Good">
-                        Good
-                      </option>
-
-                      <option value="Compromised">
-                        Compromised
-                      </option>
-
-                      <option value="Expired">
-                        Expired
-                      </option>
-
-                      <option value="Used">
-                        Used
-                      </option>
-                    </select>
-
                     <div className="button-group">
 
                       <button
@@ -321,7 +312,6 @@ function Inventory() {
                         onClick={() => {
                           setEditingId(null);
                           setEditQuantity("");
-                          setEditStatus("");
                         }}
                       >
                         Cancel
@@ -342,6 +332,15 @@ function Inventory() {
                       Edit
                     </button>
 
+                    {item.status !== "Compromised" && (
+                      <button
+                        className="secondary-button"
+                        onClick={() => handleCompromise(item)}
+                      >
+                        Mark as Compromised
+                      </button>
+                    )}
+
                   </div>
 
                 )}
@@ -359,4 +358,4 @@ function Inventory() {
   );
 }
 
-export default Inventory;
+export default Inventory; 

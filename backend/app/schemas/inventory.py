@@ -10,7 +10,8 @@ class InventoryCreate(BaseModel):
     lot_number: str
     quantity: int
     expiration_date: date
-    status: str = "Good"
+
+
 class InventoryUpdate(BaseModel):
     storage_unit_id: int
     vaccine_name: str
@@ -18,6 +19,9 @@ class InventoryUpdate(BaseModel):
     lot_number: str
     quantity: int
     expiration_date: date
+
+
+class InventoryStatusUpdate(BaseModel):
     status: str
 
 

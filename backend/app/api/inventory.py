@@ -1,3 +1,6 @@
+from app.services.audit_service import create_audit_log
+from datetime import date
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -9,6 +12,7 @@ from app.models.user import User
 from app.schemas.inventory import (
     InventoryCreate,
     InventoryResponse,
+    InventoryStatusUpdate,
     InventoryUpdate,
 )
 
@@ -18,6 +22,19 @@ router = APIRouter(
 )
 
 
+def calculate_inventory_status(inventory: Inventory) -> str:
+    if inventory.status == "Compromised":
+        return "Compromised"
+
+    if inventory.quantity <= 0:
+        return "Depleted"
+
+    if inventory.expiration_date <= date.today():
+        return "Expired"
+
+    return "Good"
+
+
 @router.get("/", response_model=list[InventoryResponse])
 def get_inventory(
     db: Session = Depends(get_db),
@@ -25,8 +42,12 @@ def get_inventory(
         require_roles("Admin", "Storage Operator")
     )
 ):
-    inventory = db.query(Inventory).all()
-    return inventory
+    inventory_items = db.query(Inventory).all()
+
+    for item in inventory_items:
+        item.status = calculate_inventory_status(item)
+
+    return inventory_items
 
 
 @router.get("/{inventory_id}", response_model=InventoryResponse)
@@ -46,6 +67,8 @@ def get_inventory_by_id(
             status_code=404,
             detail="Inventory item not found"
         )
+
+    inventory.status = calculate_inventory_status(inventory)
 
     return inventory
 
@@ -75,12 +98,29 @@ def create_inventory(
         lot_number=inventory.lot_number,
         quantity=inventory.quantity,
         expiration_date=inventory.expiration_date,
-        status=inventory.status,
+        status="Good",
     )
+
+    new_inventory.status = calculate_inventory_status(new_inventory)
 
     db.add(new_inventory)
     db.commit()
     db.refresh(new_inventory)
+
+    create_audit_log(
+        db=db,
+        user_id=current_user.id,
+        action="CREATE",
+        resource_type="Inventory",
+        resource_id=str(new_inventory.id),
+        new_values={
+            "vaccine_name": new_inventory.vaccine_name,
+            "vaccine_code": new_inventory.vaccine_code,
+            "lot_number": new_inventory.lot_number,
+            "quantity": new_inventory.quantity,
+            "status": new_inventory.status,
+        },
+    )
 
     return new_inventory
 
@@ -120,10 +160,72 @@ def update_inventory(
     inventory.lot_number = inventory_data.lot_number
     inventory.quantity = inventory_data.quantity
     inventory.expiration_date = inventory_data.expiration_date
-    inventory.status = inventory_data.status
+
+    inventory.status = calculate_inventory_status(inventory)
 
     db.commit()
     db.refresh(inventory)
+
+    create_audit_log(
+        db=db,
+        user_id=current_user.id,
+        action="UPDATE",
+        resource_type="Inventory",
+        resource_id=str(inventory.id),
+        new_values={
+            "storage_unit_id": inventory.storage_unit_id,
+            "vaccine_name": inventory.vaccine_name,
+            "vaccine_code": inventory.vaccine_code,
+            "lot_number": inventory.lot_number,
+            "quantity": inventory.quantity,
+            "expiration_date": str(inventory.expiration_date),
+            "status": inventory.status,
+        },
+    )
+
+    return inventory
+
+
+@router.patch("/{inventory_id}/status", response_model=InventoryResponse)
+def update_inventory_status(
+    inventory_id: int,
+    status_data: InventoryStatusUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(
+        require_roles("Admin")
+    )
+):
+    inventory = db.query(Inventory).filter(
+        Inventory.id == inventory_id
+    ).first()
+
+    if inventory is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Inventory item not found"
+        )
+
+    if status_data.status != "Compromised":
+        raise HTTPException(
+            status_code=400,
+            detail="Only Compromised status can be manually assigned"
+        )
+
+    inventory.status = "Compromised"
+
+    db.commit()
+    db.refresh(inventory)
+
+    create_audit_log(
+        db=db,
+        user_id=current_user.id,
+        action="STATUS_CHANGE",
+        resource_type="Inventory",
+        resource_id=str(inventory.id),
+        new_values={
+            "status": inventory.status,
+        },
+    )
 
     return inventory
 
