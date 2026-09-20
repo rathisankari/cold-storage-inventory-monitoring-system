@@ -10,6 +10,7 @@ import {
 import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Alerts from "./pages/Alerts";
 import AuditLogs from "./pages/AuditLogs";
 import ComplianceReport from "./pages/ComplianceReport";
@@ -41,7 +42,7 @@ function AppContent() {
 
   return (
     <>
-      {location.pathname !== "/" && (
+      {location.pathname !== "/" && location.pathname !== "/register" && (
         <nav className="navbar">
           <div className="navbar-brand">
             <h2>ColdGuard</h2>
@@ -101,6 +102,8 @@ function AppContent() {
 
       <Routes>
         <Route path="/" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
 
         <Route
           path="/dashboard"
