@@ -1,8 +1,17 @@
-import { BrowserRouter, Routes, Route, NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  NavLink,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import Login from "./pages/Login";
+import AuditLogs from "./pages/AuditLogs";
+import ComplianceReport from "./pages/ComplianceReport";
 
 import "./App.css";
 
@@ -57,6 +66,24 @@ function AppContent() {
               Inventory
             </NavLink>
 
+            <NavLink
+              to="/audit-logs"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              Audit Logs
+            </NavLink>
+
+            <NavLink
+              to="/compliance-report"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              Compliance Report
+            </NavLink>
+
             <button onClick={handleLogout}>
               Logout
             </button>
@@ -81,6 +108,24 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Inventory />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/audit-logs"
+          element={
+            <ProtectedRoute>
+              <AuditLogs />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/compliance-report"
+          element={
+            <ProtectedRoute>
+              <ComplianceReport />
             </ProtectedRoute>
           }
         />

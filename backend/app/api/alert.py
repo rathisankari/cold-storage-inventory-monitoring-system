@@ -76,6 +76,18 @@ def acknowledge_alert(
             detail="Alert not found"
         )
 
+    if alert.status == "Acknowledged":
+        raise HTTPException(
+            status_code=400,
+            detail="Alert is already acknowledged"
+        )
+
+    if alert.status == "Resolved":
+        raise HTTPException(
+            status_code=400,
+            detail="Resolved alert cannot be acknowledged"
+        )
+
     old_status = alert.status
 
     alert.status = "Acknowledged"
