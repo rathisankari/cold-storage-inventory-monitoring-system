@@ -1,4 +1,359 @@
-/* Login */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f7fb;
+  color: #172033;
+}
+
+/* =========================
+   Navbar
+========================= */
+
+.navbar {
+  width: 100%;
+  min-height: 72px;
+  padding: 0 40px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5eaf1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.navbar-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.navbar-brand h2 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.navbar-brand span {
+  font-size: 12px;
+  color: #667085;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  color: #667085;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 0;
+}
+
+.nav-link:hover {
+  color: #172033;
+}
+
+.nav-link.active {
+  color: #172033;
+  font-weight: 700;
+}
+
+.navbar button {
+  border: none;
+  background: #172033;
+  color: #ffffff;
+  padding: 9px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* =========================
+   Dashboard
+========================= */
+
+.dashboard {
+  min-height: calc(100vh - 72px);
+  width: 100%;
+  background: #f4f7fb;
+}
+
+.dashboard-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 32px 50px;
+}
+
+/* =========================
+   Summary Cards
+========================= */
+
+.summary-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  min-height: 125px;
+  background: #ffffff;
+  border: 1px solid #e5eaf1;
+  border-radius: 14px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-label {
+  display: block;
+  margin-bottom: 9px;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.summary-card h2 {
+  margin: 0;
+  color: #172033;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* =========================
+   Common Section
+========================= */
+
+.room-section,
+.alerts-section,
+.history-section {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e5eaf1;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.section-header h2 {
+  margin: 5px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #172033;
+}
+
+.section-label {
+  display: block;
+  color: #667085;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* =========================
+   Storage Monitoring
+========================= */
+
+.temperature-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 78px;
+  padding: 7px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.temperature-status.normal {
+  background: #ecfdf3;
+  color: #027a48;
+}
+
+.temperature-status.warning {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.room-details {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid #eef1f5;
+  padding-top: 22px;
+}
+
+.room-details > div {
+  min-width: 0;
+  padding: 0 24px;
+  border-right: 1px solid #eef1f5;
+}
+
+.room-details > div:first-child {
+  padding-left: 0;
+}
+
+.room-details > div:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+
+.room-details span {
+  display: block;
+  margin-bottom: 8px;
+  color: #667085;
+  font-size: 13px;
+}
+
+.room-details strong {
+  display: block;
+  color: #172033;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+/* =========================
+   Alerts
+========================= */
+
+.alert-count {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 50%;
+  background: #f2f4f7;
+  color: #344054;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.alert-box {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 18px;
+  border: 1px solid #fed7aa;
+  border-radius: 10px;
+  background: #fffaf5;
+}
+
+.alert-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #f97316;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.alert-box strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #9a3412;
+  font-size: 14px;
+}
+
+.alert-box p {
+  margin: 0 0 12px;
+  color: #667085;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.alert-box button {
+  border: none;
+  border-radius: 7px;
+  padding: 8px 13px;
+  background: #172033;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.no-alerts {
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+  color: #98a2b3;
+  font-size: 14px;
+  border: 1px dashed #d0d5dd;
+  border-radius: 10px;
+}
+
+/* =========================
+   Temperature History
+========================= */
+
+.history-section {
+  margin-bottom: 0;
+}
+
+.history-section .section-header {
+  margin-bottom: 20px;
+}
+
+.temperature-chart {
+  width: 100%;
+  height: 320px;
+}
+
+.temperature-chart .recharts-wrapper {
+  width: 100% !important;
+}
+
+.temperature-chart .recharts-surface {
+  overflow: visible;
+}
+
+/* =========================
+   Loading / Error
+========================= */
+
+.page-message {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f4f7fb;
+  color: #667085;
+  font-size: 15px;
+}
+
+/* =========================
+   Login
+========================= */
 
 .login-page {
   min-height: 100vh;
@@ -8,7 +363,6 @@
   background: #f4f7fb;
   color: #172033;
   padding: 40px 20px;
-  box-sizing: border-box;
 }
 
 .login-container {
@@ -39,7 +393,6 @@
 
 .login-card {
   width: 100%;
-  box-sizing: border-box;
   background: #ffffff;
   border: 1px solid #e5eaf1;
   border-radius: 14px;
@@ -83,7 +436,6 @@
 
 .login-field input {
   width: 100%;
-  box-sizing: border-box;
   padding: 12px 13px;
   border: 1px solid #d0d5dd;
   border-radius: 8px;
@@ -112,7 +464,6 @@
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s ease;
 }
 
 .login-button:hover {
@@ -140,7 +491,68 @@
   text-align: center;
 }
 
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 1000px) {
+  .navbar {
+    padding: 0 24px;
+  }
+
+  .navbar-links {
+    gap: 14px;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    min-height: auto;
+    padding: 18px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+  }
+
+  .dashboard-content {
+    padding: 24px 18px 40px;
+  }
+
+  .room-details {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .room-details > div,
+  .room-details > div:first-child,
+  .room-details > div:last-child {
+    padding: 0;
+    border-right: none;
+  }
+
+  .history-section {
+    padding: 18px;
+  }
+
+  .temperature-chart {
+    height: 280px;
+  }
+}
+
 @media (max-width: 500px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
   .login-page {
     padding: 24px 16px;
   }
@@ -151,5 +563,284 @@
 
   .login-brand h1 {
     font-size: 28px;
+  }
+}
+/* =========================
+   Inventory
+========================= */
+
+.inventory-page {
+  min-height: calc(100vh - 72px);
+  width: 100%;
+  background: #f4f7fb;
+}
+
+.inventory-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 32px 50px;
+}
+
+.inventory-header {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.inventory-header h1 {
+  margin: 6px 0 8px;
+  font-size: 28px;
+  color: #172033;
+}
+
+.inventory-header p {
+  margin: 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+/* Add inventory form */
+
+.inventory-form-section,
+.inventory-records-section {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e5eaf1;
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.inventory-form {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  color: #344054;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172033;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #172033;
+  box-shadow: 0 0 0 3px rgba(23, 32, 51, 0.08);
+}
+
+.primary-button,
+.secondary-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-button {
+  background: #172033;
+  color: #ffffff;
+}
+
+.secondary-button {
+  background: #f2f4f7;
+  color: #344054;
+  border: 1px solid #d0d5dd;
+}
+
+.primary-button:hover,
+.secondary-button:hover {
+  opacity: 0.88;
+}
+
+.inventory-form > .primary-button {
+  width: fit-content;
+  align-self: end;
+}
+
+/* Inventory records */
+
+.inventory-records-section .section-header {
+  margin-bottom: 20px;
+}
+
+.record-count {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 50%;
+  background: #f2f4f7;
+  color: #344054;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.inventory-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.inventory-card {
+  min-width: 0;
+  background: #ffffff;
+  border: 1px solid #e5eaf1;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.inventory-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.inventory-card-header h3 {
+  margin: 0 0 5px;
+  font-size: 17px;
+  color: #172033;
+}
+
+.inventory-card-header span {
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+.inventory-status {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px !important;
+  font-weight: 700;
+}
+
+.inventory-status.good {
+  background: #ecfdf3;
+  color: #027a48 !important;
+}
+
+.inventory-status.compromised {
+  background: #fef2f2;
+  color: #b42318 !important;
+}
+
+.inventory-status.expired {
+  background: #fff7ed;
+  color: #c2410c !important;
+}
+
+.inventory-status.depleted {
+  background: #f2f4f7;
+  color: #475467 !important;
+}
+
+.inventory-status.used {
+  background: #eff6ff;
+  color: #1d4ed8 !important;
+}
+
+.inventory-details {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid #eef1f5;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.inventory-details > div {
+  min-width: 0;
+}
+
+.inventory-details span {
+  display: block;
+  margin-bottom: 5px;
+  color: #667085;
+  font-size: 12px;
+}
+
+.inventory-details strong {
+  display: block;
+  color: #172033;
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.edit-section {
+  margin-top: 16px;
+}
+
+.edit-section input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.edit-section input:focus {
+  border-color: #172033;
+  box-shadow: 0 0 0 3px rgba(23, 32, 51, 0.08);
+}
+
+/* Inventory responsive */
+
+@media (max-width: 900px) {
+  .inventory-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .inventory-content {
+    padding: 24px 18px 40px;
+  }
+
+  .inventory-form {
+    grid-template-columns: 1fr;
+  }
+
+  .inventory-form > .primary-button {
+    width: 100%;
+  }
+
+  .inventory-form-section,
+  .inventory-records-section {
+    padding: 18px;
   }
 }

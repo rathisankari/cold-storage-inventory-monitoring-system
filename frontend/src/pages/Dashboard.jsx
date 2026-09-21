@@ -72,7 +72,9 @@ function Dashboard() {
       .then((response) => {
         setAlerts((currentAlerts) =>
           currentAlerts.map((alert) =>
-            alert.id === response.data.id ? response.data : alert
+            alert.id === response.data.id
+              ? response.data
+              : alert
           )
         );
       })
@@ -88,7 +90,9 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <main className="dashboard-content">
+
         <section className="summary-grid">
+
           <div className="summary-card">
             <span className="card-label">Storage Unit</span>
             <h2>{monitoring.storage_unit_name}</h2>
@@ -113,10 +117,13 @@ function Dashboard() {
             <span className="card-label">Active Alerts</span>
             <h2>{activeAlerts.length}</h2>
           </div>
+
         </section>
 
         <section className="room-section">
+
           <div className="section-header">
+
             <div>
               <span className="section-label">
                 Storage Monitoring
@@ -134,9 +141,11 @@ function Dashboard() {
                 ? "Normal"
                 : monitoring.temperature_status}
             </span>
+
           </div>
 
           <div className="room-details">
+
             <div>
               <span>Current Temperature</span>
 
@@ -163,11 +172,15 @@ function Dashboard() {
                 {monitoring.latest_temperature.humidity}%
               </strong>
             </div>
+
           </div>
+
         </section>
 
         <section className="alerts-section">
+
           <div className="section-header">
+
             <div>
               <span className="section-label">
                 Monitoring
@@ -179,72 +192,148 @@ function Dashboard() {
             <span className="alert-count">
               {activeAlerts.length}
             </span>
+
           </div>
 
           {activeAlerts.length > 0 ? (
+
             <div className="alert-box">
-              <div className="alert-icon">!</div>
+
+              <div className="alert-icon">
+                !
+              </div>
 
               <div>
-                <strong>{activeAlert.alert_type}</strong>
 
-                <p>{activeAlert.message}</p>
+                <strong>
+                  {activeAlert.alert_type}
+                </strong>
+
+                <p>
+                  {activeAlert.message}
+                </p>
 
                 <button onClick={handleAcknowledge}>
                   Acknowledge
                 </button>
+
               </div>
+
             </div>
+
           ) : (
+
             <p className="no-alerts">
               No active alerts
             </p>
+
           )}
+
         </section>
 
         <section className="history-section">
+
           <div className="section-header">
+
             <div>
               <span className="section-label">
                 Temperature History
               </span>
 
-              <h2>Temperature Trend</h2>
+              <h2>
+                Temperature Trend
+              </h2>
             </div>
+
           </div>
 
-          <div
-            style={{
-              width: "100%",
-              height: "300px",
-            }}
-          >
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
+          <div className="temperature-chart">
 
-                <XAxis dataKey="time" />
+            <ResponsiveContainer
+              width="100%"
+              height="100%"
+            >
+
+              <LineChart
+                data={chartData}
+                margin={{
+                  top: 10,
+                  right: 20,
+                  left: 0,
+                  bottom: 10,
+                }}
+              >
+
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#eef2f6"
+                />
+
+                <XAxis
+                  dataKey="time"
+                  tick={{
+                    fontSize: 11,
+                    fill: "#667085",
+                  }}
+                  tickLine={false}
+                  axisLine={{
+                    stroke: "#d0d5dd",
+                  }}
+                  interval="preserveStartEnd"
+                />
 
                 <YAxis
                   domain={[
                     monitoring.min_temp - 1,
                     monitoring.max_temp + 3,
                   ]}
+                  tick={{
+                    fontSize: 11,
+                    fill: "#667085",
+                  }}
+                  tickLine={false}
+                  axisLine={false}
                 />
 
-                <Tooltip />
+                <Tooltip
+                  contentStyle={{
+                    background: "#ffffff",
+                    border: "1px solid #e5eaf1",
+                    borderRadius: "8px",
+                    boxShadow:
+                      "0 4px 12px rgba(23, 32, 51, 0.08)",
+                  }}
+                  labelStyle={{
+                    color: "#344054",
+                    fontWeight: 600,
+                  }}
+                  formatter={(value) => [
+                    `${value}°C`,
+                    "Temperature",
+                  ]}
+                />
 
                 <Line
                   type="monotone"
                   dataKey="temperature"
                   stroke="#2563eb"
-                  strokeWidth={3}
-                  dot={{ r: 4 }}
+                  strokeWidth={2.5}
+                  dot={{
+                    r: 3,
+                  }}
+                  activeDot={{
+                    r: 5,
+                  }}
                 />
+
               </LineChart>
+
             </ResponsiveContainer>
+
           </div>
+
         </section>
+
       </main>
     </div>
   );
