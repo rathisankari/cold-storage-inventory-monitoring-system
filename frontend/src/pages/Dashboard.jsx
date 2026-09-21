@@ -44,16 +44,23 @@ function Dashboard() {
     return <div className="page-message">Loading...</div>;
   }
 
-  const temperature = monitoring.latest_temperature.temperature;
+  const temperature =
+    monitoring.latest_temperature?.temperature ?? 0;
 
   const chartData = [...temperatureHistory]
     .reverse()
+    .filter(
+      (record) =>
+        record.recorded_at !== null &&
+        record.temperature !== null &&
+        !isNaN(Number(record.temperature))
+    )
     .map((record) => ({
       time: new Date(record.recorded_at).toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
       }),
-      temperature: record.temperature,
+      temperature: Number(record.temperature),
     }));
 
   const activeAlerts = alerts.filter(
@@ -94,12 +101,20 @@ function Dashboard() {
         <section className="summary-grid">
 
           <div className="summary-card">
-            <span className="card-label">Storage Unit</span>
-            <h2>{monitoring.storage_unit_name}</h2>
+            <span className="card-label">
+              Storage Unit
+            </span>
+
+            <h2>
+              {monitoring.storage_unit_name}
+            </h2>
           </div>
 
           <div className="summary-card">
-            <span className="card-label">Temperature</span>
+            <span className="card-label">
+              Temperature
+            </span>
+
             <h2>
               {temperature}
               {"\u00B0"}C
@@ -107,15 +122,23 @@ function Dashboard() {
           </div>
 
           <div className="summary-card">
-            <span className="card-label">Humidity</span>
+            <span className="card-label">
+              Humidity
+            </span>
+
             <h2>
-              {monitoring.latest_temperature.humidity}%
+              {monitoring.latest_temperature?.humidity ?? 0}%
             </h2>
           </div>
 
           <div className="summary-card">
-            <span className="card-label">Active Alerts</span>
-            <h2>{activeAlerts.length}</h2>
+            <span className="card-label">
+              Active Alerts
+            </span>
+
+            <h2>
+              {activeAlerts.length}
+            </h2>
           </div>
 
         </section>
@@ -129,7 +152,9 @@ function Dashboard() {
                 Storage Monitoring
               </span>
 
-              <h2>{monitoring.storage_unit_name}</h2>
+              <h2>
+                {monitoring.storage_unit_name}
+              </h2>
             </div>
 
             <span
@@ -147,7 +172,9 @@ function Dashboard() {
           <div className="room-details">
 
             <div>
-              <span>Current Temperature</span>
+              <span>
+                Current Temperature
+              </span>
 
               <strong>
                 {temperature}
@@ -156,7 +183,9 @@ function Dashboard() {
             </div>
 
             <div>
-              <span>Allowed Range</span>
+              <span>
+                Allowed Range
+              </span>
 
               <strong>
                 {monitoring.min_temp}
@@ -166,10 +195,12 @@ function Dashboard() {
             </div>
 
             <div>
-              <span>Humidity</span>
+              <span>
+                Humidity
+              </span>
 
               <strong>
-                {monitoring.latest_temperature.humidity}%
+                {monitoring.latest_temperature?.humidity ?? 0}%
               </strong>
             </div>
 
@@ -186,7 +217,9 @@ function Dashboard() {
                 Monitoring
               </span>
 
-              <h2>Active Alerts</h2>
+              <h2>
+                Active Alerts
+              </h2>
             </div>
 
             <span className="alert-count">
@@ -213,7 +246,9 @@ function Dashboard() {
                   {activeAlert.message}
                 </p>
 
-                <button onClick={handleAcknowledge}>
+                <button
+                  onClick={handleAcknowledge}
+                >
                   Acknowledge
                 </button>
 
@@ -251,22 +286,21 @@ function Dashboard() {
 
             <ResponsiveContainer
               width="100%"
-              height="100%"
+              height={320}
             >
 
               <LineChart
                 data={chartData}
                 margin={{
-                  top: 10,
-                  right: 20,
-                  left: 0,
-                  bottom: 10,
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 20,
                 }}
               >
 
                 <CartesianGrid
                   strokeDasharray="3 3"
-                  stroke="#eef2f6"
                 />
 
                 <XAxis
@@ -283,10 +317,7 @@ function Dashboard() {
                 />
 
                 <YAxis
-                  domain={[
-                    monitoring.min_temp - 1,
-                    monitoring.max_temp + 3,
-                  ]}
+                  domain={[0, 10]}
                   tick={{
                     fontSize: 11,
                     fill: "#667085",
@@ -317,13 +348,16 @@ function Dashboard() {
                   type="monotone"
                   dataKey="temperature"
                   stroke="#2563eb"
-                  strokeWidth={2.5}
+                  strokeWidth={3}
                   dot={{
-                    r: 3,
+                    r: 4,
+                    fill: "#2563eb",
                   }}
                   activeDot={{
-                    r: 5,
+                    r: 6,
                   }}
+                  connectNulls={true}
+                  isAnimationActive={false}
                 />
 
               </LineChart>

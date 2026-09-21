@@ -327,15 +327,10 @@ body {
 .temperature-chart {
   width: 100%;
   height: 320px;
+  min-height: 320px;
+  display: block;
 }
 
-.temperature-chart .recharts-wrapper {
-  width: 100% !important;
-}
-
-.temperature-chart .recharts-surface {
-  overflow: visible;
-}
 
 /* =========================
    Loading / Error
