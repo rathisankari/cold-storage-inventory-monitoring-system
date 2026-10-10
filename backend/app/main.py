@@ -9,7 +9,7 @@ from app.api.alert import router as alert_router
 from app.api.monitoring import router as monitoring_router
 from app.api.audit import router as audit_router
 from app.api.compliance import router as compliance_router
-
+from app.api.ai_anomaly import router as ai_anomaly_router
 from app.core.config import settings
 from app.core.database import Base, engine
 
@@ -56,6 +56,7 @@ app.include_router(monitoring_router)
 app.include_router(alert_router)
 app.include_router(audit_router)
 app.include_router(compliance_router)
+app.include_router(ai_anomaly_router)
 
 
 @app.get("/health")
