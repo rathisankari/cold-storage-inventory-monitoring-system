@@ -1,3 +1,4 @@
+
 import {
   BrowserRouter,
   Routes,
@@ -14,6 +15,7 @@ import Register from "./pages/Register";
 import Alerts from "./pages/Alerts";
 import AuditLogs from "./pages/AuditLogs";
 import ComplianceReport from "./pages/ComplianceReport";
+import AIAnomalies from "./pages/AIAnomalies";
 
 import "./App.css";
 
@@ -42,63 +44,73 @@ function AppContent() {
 
   return (
     <>
-      {location.pathname !== "/" && location.pathname !== "/register" && (
-        <nav className="navbar">
-          <div className="navbar-brand">
-            <h2>ColdGuard</h2>
-            <span>Cold Storage Monitoring</span>
-          </div>
+      {location.pathname !== "/" &&
+        location.pathname !== "/register" && (
+          <nav className="navbar">
+            <div className="navbar-brand">
+              <h2>ColdGuard</h2>
+              <span>Cold Storage Monitoring</span>
+            </div>
 
-          <div className="navbar-links">
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Dashboard
-            </NavLink>
+            <div className="navbar-links">
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Dashboard
+              </NavLink>
 
-            <NavLink
-              to="/inventory"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Inventory
-            </NavLink>
+              <NavLink
+                to="/inventory"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Inventory
+              </NavLink>
 
-            <NavLink
-              to="/alerts"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Alerts
-            </NavLink>
+              <NavLink
+                to="/alerts"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Alerts
+              </NavLink>
 
-            <NavLink
-              to="/audit-logs"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Audit Logs
-            </NavLink>
+              <NavLink
+                to="/ai-anomalies"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                AI Anomalies
+              </NavLink>
 
-            <NavLink
-              to="/compliance-report"
-              className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
-              }
-            >
-              Compliance Report
-            </NavLink>
+              <NavLink
+                to="/audit-logs"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Audit Logs
+              </NavLink>
 
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-        </nav>
-      )}
+              <NavLink
+                to="/compliance-report"
+                className={({ isActive }) =>
+                  isActive ? "nav-link active" : "nav-link"
+                }
+              >
+                Compliance Report
+              </NavLink>
+
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          </nav>
+        )}
 
       <Routes>
         <Route path="/" element={<Login />} />
@@ -128,6 +140,15 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <Alerts />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/ai-anomalies"
+          element={
+            <ProtectedRoute>
+              <AIAnomalies />
             </ProtectedRoute>
           }
         />
